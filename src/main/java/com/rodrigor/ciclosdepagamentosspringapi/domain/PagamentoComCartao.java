@@ -9,6 +9,7 @@ public class PagamentoComCartao extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer numeroParcelas;
+	
 	public PagamentoComCartao() {
 		
 	}

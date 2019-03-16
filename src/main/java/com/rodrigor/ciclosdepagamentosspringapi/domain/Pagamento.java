@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -11,30 +13,28 @@ import javax.persistence.OneToOne;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.enums.EstadoPagamento;
 
 @Entity
-public class Pagamento implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED )
+public abstract class Pagamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private Integer id;
-	private EstadoPagamento estadoDoPagamento;
+	private Integer estadoDoPagamento;
 	
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
 	@MapsId
 	private Pedido pedido;
 	
-	private Cliente cliente;
-	
 	public Pagamento() {
 		
 	}
 
-	public Pagamento(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido, Cliente cliente) {
+	public Pagamento(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estadoDoPagamento = estadoDoPagamento;
+		this.estadoDoPagamento = estadoDoPagamento.getCodigo();
 		this.pedido = pedido;
-		this.cliente = cliente;
 	}
 
 	public Integer getId() {
@@ -59,14 +59,6 @@ public class Pagamento implements Serializable {
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 
 	@Override
@@ -96,7 +88,7 @@ public class Pagamento implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Pagamento [id=" + id + ", estadoDoPagamento=" + estadoDoPagamento + ", pedido=" + pedido + ", cliente="
-				+ cliente + "]";
+		return "Pagamento [id=" + id + ", estadoDoPagamento=" + estadoDoPagamento + ", pedido=" + pedido + "]";
 	}
+
 }

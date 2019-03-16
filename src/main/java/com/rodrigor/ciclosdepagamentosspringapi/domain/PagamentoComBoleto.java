@@ -2,8 +2,11 @@ package com.rodrigor.ciclosdepagamentosspringapi.domain;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+
 import com.rodrigor.ciclosdepagamentosspringapi.domain.enums.EstadoPagamento;
 
+@Entity
 public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
@@ -14,8 +17,8 @@ public class PagamentoComBoleto extends Pagamento {
 		
 	}
 
-	public PagamentoComBoleto(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido, Cliente cliente, Date dataVencimento, Date dataPagamento) {
-		super(id, estadoDoPagamento, pedido, cliente);
+	public PagamentoComBoleto(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido, Date dataVencimento, Date dataPagamento) {
+		super(id, estadoDoPagamento, pedido);
 		this.dataVencimento = dataVencimento;
 		this.dataPagamento = dataPagamento;
 	}

@@ -1,18 +1,20 @@
 package com.rodrigor.ciclosdepagamentosspringapi.domain;
 
+import javax.persistence.Entity;
+
 import com.rodrigor.ciclosdepagamentosspringapi.domain.enums.EstadoPagamento;
 
+@Entity
 public class PagamentoComCartao extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer numeroParcelas;
-	
 	public PagamentoComCartao() {
 		
 	}
 
-	public PagamentoComCartao(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido, Cliente cliente, Integer numeroParcelas) {
-		super(id, estadoDoPagamento, pedido, cliente);
+	public PagamentoComCartao(Integer id, EstadoPagamento estadoDoPagamento, Pedido pedido, Integer numeroParcelas) {
+		super(id, estadoDoPagamento, pedido);
 		this.numeroParcelas = numeroParcelas;
 	}
 

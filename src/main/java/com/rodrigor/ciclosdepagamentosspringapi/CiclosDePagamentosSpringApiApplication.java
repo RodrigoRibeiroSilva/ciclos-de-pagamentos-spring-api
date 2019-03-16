@@ -1,5 +1,6 @@
 package com.rodrigor.ciclosdepagamentosspringapi;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.rodrigor.ciclosdepagamentosspringapi.domain.Cidade;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Cliente;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Endereco;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Estado;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.Pagamento;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.PagamentoComBoleto;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.PagamentoComCartao;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.Pedido;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Produto;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.enums.EstadoPagamento;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.enums.TipoCliente;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.CategoriaRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.CidadeRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.ClienteRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.EnderecoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.EstadoRepository;
+import com.rodrigor.ciclosdepagamentosspringapi.repositories.PagamentoRepository;
+import com.rodrigor.ciclosdepagamentosspringapi.repositories.PedidoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class CiclosDePagamentosSpringApiApplication implements CommandLineRunner
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CiclosDePagamentosSpringApiApplication.class, args);
@@ -84,8 +96,23 @@ public class CiclosDePagamentosSpringApiApplication implements CommandLineRunner
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
 		
 		clienteRepository.saveAll(Arrays.asList(cliente1));
-		
 		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		
+		SimpleDateFormat createAt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido pedido1 = new Pedido(null, createAt.parse("16/03/2019 10:32"), cliente1, endereco1);
+		Pedido pedido2 = new Pedido(null, createAt.parse("16/03/2019 10:40"), cliente1, endereco2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
+		pedido1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, createAt.parse("16/04/2019 00:00"), null);
+		pedido2.setPagamento(pagto2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
 	}
 

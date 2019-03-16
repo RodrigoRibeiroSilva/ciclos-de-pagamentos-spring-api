@@ -46,11 +46,11 @@ public abstract class Pagamento implements Serializable {
 	}
 
 	public EstadoPagamento getEstadoDoPagamento() {
-		return estadoDoPagamento;
+		return EstadoPagamento.toEnum(estadoDoPagamento);
 	}
 
 	public void setEstadoDoPagamento(EstadoPagamento estadoDoPagamento) {
-		this.estadoDoPagamento = estadoDoPagamento;
+		this.estadoDoPagamento = estadoDoPagamento.getCodigo();
 	}
 
 	public Pedido getPedido() {

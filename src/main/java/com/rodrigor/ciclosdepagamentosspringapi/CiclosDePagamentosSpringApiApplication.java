@@ -13,6 +13,7 @@ import com.rodrigor.ciclosdepagamentosspringapi.domain.Cidade;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Cliente;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Endereco;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Estado;
+import com.rodrigor.ciclosdepagamentosspringapi.domain.ItemPedido;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.Pagamento;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.PagamentoComBoleto;
 import com.rodrigor.ciclosdepagamentosspringapi.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.rodrigor.ciclosdepagamentosspringapi.repositories.CidadeRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.ClienteRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.EnderecoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.EstadoRepository;
+import com.rodrigor.ciclosdepagamentosspringapi.repositories.ItemPedidoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.PagamentoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.PedidoRepository;
 import com.rodrigor.ciclosdepagamentosspringapi.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CiclosDePagamentosSpringApiApplication implements CommandLineRunner
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CiclosDePagamentosSpringApiApplication.class, args);
@@ -113,6 +117,19 @@ public class CiclosDePagamentosSpringApiApplication implements CommandLineRunner
 		
 		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido itemPedido1 = new ItemPedido(pedido1, produto1, 0.00, 1, 2000.00);
+		ItemPedido itemPedido2 = new ItemPedido(pedido1, produto3, 0.00, 2, 80.00);
+		ItemPedido itemPedido3 = new ItemPedido(pedido2, produto2, 100.00, 1, 800.00);
+		
+		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
+		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
+		
+		produto1.getItens().addAll(Arrays.asList(itemPedido1));
+		produto2.getItens().addAll(Arrays.asList(itemPedido3));
+		produto3.getItens().addAll(Arrays.asList(itemPedido2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(itemPedido1,itemPedido2,itemPedido3));
 		
 	}
 

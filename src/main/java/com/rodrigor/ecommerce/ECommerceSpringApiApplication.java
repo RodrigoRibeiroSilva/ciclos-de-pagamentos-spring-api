@@ -86,7 +86,7 @@ public class ECommerceSpringApiApplication implements CommandLineRunner{
 		Estado estado2 = new Estado(null, "São Paulo");
 		
 		Cidade cidade1 = new Cidade(null, "Uberlândia", estado1);
-		Cidade cidade2 = new Cidade(null, "Uberlândia", estado2);
+		Cidade cidade2 = new Cidade(null, "Barueri", estado2);	
 		Cidade cidade3 = new Cidade(null, "Campinas", estado2);
 		
 		estado1.getCidades().addAll(Arrays.asList(cidade1));
@@ -99,43 +99,43 @@ public class ECommerceSpringApiApplication implements CommandLineRunner{
 		Cliente cliente1 = new Cliente(null , "Maria Silva", "maria@gmailcom", "12345678", TipoCliente.PESSOAFISICA);
 		cliente1.getTelefones().addAll(Arrays.asList("123456788", "832983298"));
 		
-		Endereco endereco1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "454675675", cliente1, cidade1);
-		Endereco endereco2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "323293298", cliente1, cidade2);
+		Endereco endereco1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "454675675", cliente1, cidade1.getId());
+		Endereco endereco2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "323293298", cliente1, cidade2.getId());
 		
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
-		
-		clienteRepository.saveAll(Arrays.asList(cliente1));
-		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
-		
-		SimpleDateFormat createAt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		
-		Pedido pedido1 = new Pedido(null, createAt.parse("16/03/2019 10:32"), cliente1, endereco1);
-		Pedido pedido2 = new Pedido(null, createAt.parse("16/03/2019 10:40"), cliente1, endereco2);
-		
-		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
-		pedido1.setPagamento(pagto1);
-		
-		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, createAt.parse("16/04/2019 00:00"), null);
-		pedido2.setPagamento(pagto2);
-		
-		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
-		
-		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
-		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-		
-		ItemPedido itemPedido1 = new ItemPedido(pedido1, produto1, 0.00, 1, 2000.00);
-		ItemPedido itemPedido2 = new ItemPedido(pedido1, produto3, 0.00, 2, 80.00);
-		ItemPedido itemPedido3 = new ItemPedido(pedido2, produto2, 100.00, 1, 800.00);
-		
-		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
-		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
-		
-		produto1.getItens().addAll(Arrays.asList(itemPedido1));
-		produto2.getItens().addAll(Arrays.asList(itemPedido3));
-		produto3.getItens().addAll(Arrays.asList(itemPedido2));
-		
-		itemPedidoRepository.saveAll(Arrays.asList(itemPedido1,itemPedido2,itemPedido3));
-		
+//		
+//		clienteRepository.saveAll(Arrays.asList(cliente1));
+//		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+//		
+//		SimpleDateFormat createAt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+//		
+//		Pedido pedido1 = new Pedido(null, createAt.parse("16/03/2019 10:32"), cliente1, endereco1);
+//		Pedido pedido2 = new Pedido(null, createAt.parse("16/03/2019 10:40"), cliente1, endereco2);
+//		
+//		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
+//		pedido1.setPagamento(pagto1);
+//		
+//		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, createAt.parse("16/04/2019 00:00"), null);
+//		pedido2.setPagamento(pagto2);
+//		
+//		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+//		
+//		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+//		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+//		
+//		ItemPedido itemPedido1 = new ItemPedido(pedido1, produto1, 0.00, 1, 2000.00);
+//		ItemPedido itemPedido2 = new ItemPedido(pedido1, produto3, 0.00, 2, 80.00);
+//		ItemPedido itemPedido3 = new ItemPedido(pedido2, produto2, 100.00, 1, 800.00);
+//		
+//		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
+//		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
+//		
+//		produto1.getItens().addAll(Arrays.asList(itemPedido1));
+//		produto2.getItens().addAll(Arrays.asList(itemPedido3));
+//		produto3.getItens().addAll(Arrays.asList(itemPedido2));
+//		
+//		itemPedidoRepository.saveAll(Arrays.asList(itemPedido1,itemPedido2,itemPedido3));
+//		
 	}
 
 }

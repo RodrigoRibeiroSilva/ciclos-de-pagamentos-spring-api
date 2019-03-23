@@ -18,7 +18,6 @@ import com.rodrigor.ecommerce.domain.enums.TipoCliente;
 import com.rodrigor.ecommerce.dto.ClienteDTO;
 import com.rodrigor.ecommerce.dto.ClienteNewDTO;
 import com.rodrigor.ecommerce.repositories.ClienteRepository;
-import com.rodrigor.ecommerce.repositories.EnderecoRepository;
 import com.rodrigor.ecommerce.services.exceptions.DataIntegrityException;
 import com.rodrigor.ecommerce.services.exceptions.ObjectNotFoundException;
 

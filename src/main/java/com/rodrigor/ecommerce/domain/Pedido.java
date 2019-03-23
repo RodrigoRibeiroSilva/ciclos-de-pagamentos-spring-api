@@ -37,7 +37,7 @@ public class Pedido implements Serializable {
 	
 	@ManyToOne()
 	@JoinColumn(name = "endereco_entrega_id")
-	private Endereco enderecoEntrega;
+	private Endereco enderecoDeEntrega;
 	
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
@@ -51,7 +51,7 @@ public class Pedido implements Serializable {
 		this.id = id;
 		this.dataDoPedido = dataDoPedido;
 		this.cliente = cliente;
-		this.enderecoEntrega = enderecoEntrega;
+		this.enderecoDeEntrega = enderecoEntrega;
 	}
 	
 	public Double getValorTotal() {
@@ -94,12 +94,12 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Endereco getEnderecoEntrega() {
-		return enderecoEntrega;
+	public Endereco getEnderecoDeEntrega() {
+		return enderecoDeEntrega;
 	}
 
-	public void setEnderecoEntrega(Endereco enderecoEntrega) {
-		this.enderecoEntrega = enderecoEntrega;
+	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 	
 	public Set<ItemPedido> getItens() {
@@ -138,6 +138,6 @@ public class Pedido implements Serializable {
 	@Override
 	public String toString() {
 		return "Pedido [id=" + id + ", dataDoPedido=" + dataDoPedido + ", pagamento=" + pagamento + ", cliente="
-				+ cliente + ", enderecoEntrega=" + enderecoEntrega + "]";
+				+ cliente + ", enderecoEntrega=" + enderecoDeEntrega + "]";
 	}
 }

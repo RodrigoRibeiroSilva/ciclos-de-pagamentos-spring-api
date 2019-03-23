@@ -11,14 +11,17 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rodrigor.ecommerce.domain.Cidade;
 import com.rodrigor.ecommerce.domain.Cliente;
 import com.rodrigor.ecommerce.domain.Endereco;
 import com.rodrigor.ecommerce.domain.enums.TipoCliente;
 import com.rodrigor.ecommerce.dto.ClienteDTO;
-import com.rodrigor.ecommerce.dto.ClienteInsertDTO;
+import com.rodrigor.ecommerce.dto.ClienteNewDTO;
 import com.rodrigor.ecommerce.repositories.ClienteRepository;
+import com.rodrigor.ecommerce.repositories.EnderecoRepository;
 import com.rodrigor.ecommerce.services.exceptions.DataIntegrityException;
 import com.rodrigor.ecommerce.services.exceptions.ObjectNotFoundException;
+
 
 @Service
 public class ClienteService {
@@ -26,13 +29,9 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
-	public List<Cliente> findAll(){
-		return repo.findAll();
-	}
 	
-	public Cliente findById(Integer id) {
+	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
-		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
@@ -45,23 +44,26 @@ public class ClienteService {
 	}
 	
 	public Cliente update(Cliente obj) {
-		Cliente cliente = findById(obj.getId());
-		updateDate(cliente, obj);
-		return repo.save(cliente);
+		Cliente newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
 	}
-	
+
 	public void delete(Integer id) {
-		findById(id);
-		
+		find(id);
 		try {
 			repo.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir pois existem entidades relacionadas.");
 		}
-		
+		catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionados");
+		}
 	}
 	
-	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+	public List<Cliente> findAll() {
+		return repo.findAll();
+	}
+	
+	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
@@ -70,9 +72,10 @@ public class ClienteService {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
 	}
 	
-	public Cliente fromDTO(ClienteInsertDTO objDto) {
-		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipoCliente()));
-		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, objDto.getCidadeId());
+	public Cliente fromDTO(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
+		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 		cli.getEnderecos().add(end);
 		cli.getTelefones().add(objDto.getTelefone1());
 		if (objDto.getTelefone2()!=null) {
@@ -84,7 +87,7 @@ public class ClienteService {
 		return cli;
 	}
 	
-	private void updateDate(Cliente newObj, Cliente obj) {
+	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}

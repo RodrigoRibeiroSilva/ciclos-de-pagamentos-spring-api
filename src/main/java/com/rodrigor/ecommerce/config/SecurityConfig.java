@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.rodrigor.ecommerce.security.JWTAuthenticationFilter;
+import com.rodrigor.ecommerce.security.JWTAuthorizationFilter;
 import com.rodrigor.ecommerce.security.JWTUtil;
 
 @Configuration
@@ -54,8 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.anyRequest().authenticated();
-		//Filtro para interceptar a requisição e efetuar a autenticação do usuário
+		//Filtro para interceptar a requisição, efetuar a autenticação do usuário e gerar o token
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		//Filtro para extrair o token do header e efetuar a autorização.
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService ));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	

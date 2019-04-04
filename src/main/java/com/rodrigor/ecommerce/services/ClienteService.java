@@ -15,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rodrigor.ecommerce.domain.Cidade;
 import com.rodrigor.ecommerce.domain.Cliente;
 import com.rodrigor.ecommerce.domain.Endereco;
+import com.rodrigor.ecommerce.domain.enums.PerfilUsuario;
 import com.rodrigor.ecommerce.domain.enums.TipoCliente;
 import com.rodrigor.ecommerce.dto.ClienteDTO;
 import com.rodrigor.ecommerce.dto.ClienteNewDTO;
 import com.rodrigor.ecommerce.repositories.ClienteRepository;
+import com.rodrigor.ecommerce.security.UserSS;
+import com.rodrigor.ecommerce.services.exceptions.AuthorizationException;
 import com.rodrigor.ecommerce.services.exceptions.DataIntegrityException;
 import com.rodrigor.ecommerce.services.exceptions.ObjectNotFoundException;
 
@@ -33,6 +36,12 @@ public class ClienteService {
 	private ClienteRepository repo;
 	
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		
+		if(user == null || !user.hasRole(PerfilUsuario.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));

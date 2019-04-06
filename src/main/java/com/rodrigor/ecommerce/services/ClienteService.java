@@ -70,6 +70,10 @@ public class ClienteService {
 		}
 	}
 	
+	public Cliente findByEmail(String email) {
+		return repo.findByEmail(email);
+	}
+	
 	public List<Cliente> findAll() {
 		return repo.findAll();
 	}

@@ -1,5 +1,6 @@
 package com.rodrigor.ecommerce.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rodrigor.ecommerce.domain.Cidade;
 import com.rodrigor.ecommerce.domain.Cliente;
@@ -34,6 +36,9 @@ public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository repo;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Cliente find(Integer id) {
 		UserSS user = UserService.authenticated();
@@ -76,6 +81,10 @@ public class ClienteService {
 	
 	public List<Cliente> findAll() {
 		return repo.findAll();
+	}
+	
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 	
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
